@@ -52,7 +52,8 @@
     margin-bottom: 16px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   }
-  label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+  label { display: flex; align-items: center; gap: 6px; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+  label svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--muted); }
   input[type=text], input[type=number], input[type=date], input[list], select, textarea {
     width: 100%;
     padding: 10px 12px;
@@ -156,21 +157,17 @@
 
 <main>
   <div class="card">
-    <label for="voornaam">Voornaam</label>
-    <input type="text" id="voornaam" list="voornamenlijst" autocomplete="off" />
-    <datalist id="voornamenlijst"></datalist>
+    <label for="van"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path></svg>Van</label>
+    <input type="text" id="van" list="vanlijst" placeholder="Bijv. Jan Jansen" autocomplete="off" />
+    <datalist id="vanlijst"></datalist>
 
-    <label for="achternaam">Achternaam</label>
-    <input type="text" id="achternaam" list="achternamenlijst" autocomplete="off" />
-    <datalist id="achternamenlijst"></datalist>
-
-    <label for="iban">IBAN</label>
+    <label for="iban"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>IBAN</label>
     <input type="text" id="iban" list="ibanlijst" placeholder="NL00 BANK 0123456789" autocomplete="off" />
     <datalist id="ibanlijst"></datalist>
 
-    <label for="balie">Kostenplaats</label>
-    <input type="text" id="balie" list="balielijst" autocomplete="off" style="margin-bottom:6px;" />
-    <div class="hint" style="margin-top:0; margin-bottom:0;">Vestiging, afdeling of balie waarop deze kosten geboekt moeten worden.</div>
+    <label for="balie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 21v-4h6v4"></path><path d="M9 8h1M14 8h1M9 12h1M14 12h1"></path></svg>Kostenplaats</label>
+    <input type="text" id="balie" list="balielijst" placeholder="Vestiging of afdeling" autocomplete="off" style="margin-bottom:6px;" />
+    <div class="hint" style="margin-top:0; margin-bottom:0;">Vestiging of afdeling waarop deze kosten geboekt mogen worden.</div>
     <datalist id="balielijst"></datalist>
   </div>
 
@@ -242,26 +239,23 @@
       <button type="button" class="remove-line-btn" title="Regel verwijderen">&times;</button>
     </div>
 
-    <label>Datum</label>
-    <input type="date" class="f-datum" />
-
-    <label>Omschrijving</label>
+    <label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>Omschrijving</label>
     <input type="text" class="f-omschrijving" placeholder="Bijv. lunch klantbezoek" autocomplete="off" />
 
-    <label>Leverancier</label>
+    <label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>Leverancier</label>
     <input type="text" class="f-leverancier" placeholder="Naam leverancier" autocomplete="off" />
 
-    <label>Totaalbedrag (incl. BTW)</label>
+    <label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a1 1 0 0 1 1 1v18l-2.5-1.5L14 21l-2.5-1.5L9 21l-2.5-1.5L4 21V3a1 1 0 0 1 1-1Z"></path><path d="M8 7h8M8 11h8M8 15h5"></path></svg>Totaalbedrag (incl. BTW)</label>
     <input type="number" class="f-totaal" step="0.01" min="0" placeholder="0,00" />
 
-    <label>BTW-bedrag per tarief</label>
+    <label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>BTW-bedrag per tarief</label>
     <div class="hint" style="margin-top:-10px;">Zoals vermeld op de bon bij "BTW 21%" / "BTW 9%" — niet het bedrag incl. BTW.</div>
     <div class="splits-container"></div>
     <button type="button" class="link-btn add-split-btn" style="margin-bottom:16px;">+ Nog een BTW-tarief op dit bonnetje</button>
 
     <div class="line-computed"></div>
 
-    <label>Bonnetje</label>
+    <label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"></path><circle cx="12" cy="13" r="4"></circle></svg>Bonnetje</label>
     <div class="file-buttons">
       <button type="button" class="btn btn-outline camera-btn">Foto maken</button>
       <button type="button" class="btn btn-outline file-btn">Bestand kiezen</button>
@@ -289,8 +283,7 @@
 (function () {
   "use strict";
 
-  const LS_VOORNAMEN = "decl_voornamen";
-  const LS_ACHTERNAMEN = "decl_achternamen";
+  const LS_NAMEN = "decl_namen";
   const LS_IBANS = "decl_ibans";
   const LS_BALIES = "decl_balies";
   const LS_APPKEY = "db_app_key";
@@ -340,8 +333,7 @@
     });
   }
   function renderAllDatalists() {
-    renderDatalist("voornamenlijst", LS_VOORNAMEN);
-    renderDatalist("achternamenlijst", LS_ACHTERNAMEN);
+    renderDatalist("vanlijst", LS_NAMEN);
     renderDatalist("ibanlijst", LS_IBANS);
     renderDatalist("balielijst", LS_BALIES);
   }
@@ -557,9 +549,7 @@
     lines.set(id, data);
 
     const q = (sel) => node.querySelector(sel);
-    q(".f-datum").value = data.datum;
 
-    q(".f-datum").addEventListener("input", (e) => { data.datum = e.target.value; });
     q(".f-omschrijving").addEventListener("input", (e) => { data.omschrijving = e.target.value; });
     q(".f-leverancier").addEventListener("input", (e) => { data.leverancier = e.target.value; });
     q(".f-totaal").addEventListener("input", (e) => { data.totaalIncl = parseFloat(e.target.value) || 0; updateLineComputed(node, data); updateTotals(); });
@@ -588,8 +578,7 @@
   document.getElementById("addLineBtn").addEventListener("click", () => addLine());
 
   function resetForm() {
-    document.getElementById("voornaam").value = "";
-    document.getElementById("achternaam").value = "";
+    document.getElementById("van").value = "";
     document.getElementById("iban").value = "";
     document.getElementById("balie").value = "";
     document.getElementById("linesContainer").innerHTML = "";
@@ -599,8 +588,7 @@
 
   function collectHeader() {
     return {
-      voornaam: document.getElementById("voornaam").value.trim(),
-      achternaam: document.getElementById("achternaam").value.trim(),
+      van: document.getElementById("van").value.trim(),
       iban: document.getElementById("iban").value.trim().toUpperCase(),
       balie: document.getElementById("balie").value.trim(),
     };
@@ -706,7 +694,7 @@
         page.drawText("DECLARATIEFORMULIER", { x: MARGIN, y, size: 16, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
         y -= 24;
         const infoLines = [
-          ["Naam:", `${header.voornaam} ${header.achternaam}`.trim() || "-"],
+          ["Naam:", header.van || "-"],
           ["IBAN:", header.iban || "-"],
           ["Kostenplaats/vestiging:", header.balie || "-"],
           ["Ingediend op:", nowStr],
@@ -721,7 +709,7 @@
         });
         y -= 8;
       } else {
-        page.drawText(`Declaratie ${header.voornaam} ${header.achternaam}`.trim() + " — vervolg", { x: MARGIN, y, size: 12, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+        page.drawText(`Declaratie ${header.van}`.trim() + " — vervolg", { x: MARGIN, y, size: 12, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
         y -= 20;
       }
       drawTableHeaderRow();
@@ -814,7 +802,7 @@
     const pad = (n) => String(n).padStart(2, "0");
     const datePart = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
     const timePart = `${pad(d.getHours())}${pad(d.getMinutes())}`;
-    const naamPart = sanitizeForFilename(header.achternaam);
+    const naamPart = sanitizeForFilename(header.van);
     return `declaratie_${d.getFullYear()}_${naamPart}_${datePart}_${timePart}.pdf`;
   }
 
@@ -1224,16 +1212,19 @@
     const statusEl = document.getElementById("status");
     const header = collectHeader();
 
-    if (!header.voornaam || !header.achternaam) return setStatus(statusEl, "err", "Vul voornaam en achternaam in.");
+    if (!header.van) return setStatus(statusEl, "err", "Vul in wie de declaratie indient.");
     if (!header.iban) return setStatus(statusEl, "err", "Vul het IBAN in.");
-    if (!header.balie) return setStatus(statusEl, "err", "Vul de balie/vestiging in.");
+    if (!header.balie) return setStatus(statusEl, "err", "Vul de kostenplaats in.");
 
     const lineArr = Array.from(lines.values())
       .map((l) => ({ ...l, splits: l.splits.filter((s) => Number(s.btwBedrag) > 0) }))
       .filter((l) => l.omschrijving.trim() && Number(l.totaalIncl) > 0);
     if (!lineArr.length) return setStatus(statusEl, "err", "Voeg minstens één regel toe met een omschrijving en een totaalbedrag.");
 
-    const missingBon = lineArr.filter((l) => !l.bonFile).length;
+    const missingBonRegels = lineArr.map((l, i) => (!l.bonFile ? i + 1 : null)).filter((n) => n !== null);
+    if (missingBonRegels.length) {
+      return setStatus(statusEl, "err", "Voeg bij elke regel een bonnetje toe — ontbreekt nog bij regel " + missingBonRegels.join(", ") + ".");
+    }
 
     const btn = document.getElementById("submitBtn");
     btn.disabled = true;
@@ -1242,12 +1233,11 @@
     try {
       const pdfBytes = await buildDeclaratiePdf({ header, lineArr });
       const filename = buildFilename(header);
-      const bonHint = missingBon ? ` (let op: ${missingBon} regel(s) zonder bonnetje)` : "";
 
       if (isDropboxConnected()) {
         setStatus(statusEl, "info", "PDF wordt opgeslagen in Dropbox...");
         await uploadToDropbox(filename, pdfBytes);
-        setStatus(statusEl, "ok", "Opgeslagen in Dropbox als " + filename + bonHint);
+        setStatus(statusEl, "ok", "Opgeslagen in Dropbox als " + filename);
         renderOpenstaandeList();
       } else {
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
@@ -1257,11 +1247,10 @@
           return;
         }
         const verb = outcome === "shared" ? "gedeeld" : "lokaal gedownload";
-        setStatus(statusEl, "ok", "PDF is " + verb + ": " + filename + bonHint + ". Verbind eventueel via het tandwiel-icoon met Dropbox om declaraties automatisch te bewaren.");
+        setStatus(statusEl, "ok", "PDF is " + verb + ": " + filename + ". Verbind eventueel via het tandwiel-icoon met Dropbox om declaraties automatisch te bewaren.");
       }
 
-      saveIfNew(LS_VOORNAMEN, header.voornaam);
-      saveIfNew(LS_ACHTERNAMEN, header.achternaam);
+      saveIfNew(LS_NAMEN, header.van);
       saveIfNew(LS_IBANS, header.iban);
       saveIfNew(LS_BALIES, header.balie);
       renderAllDatalists();
