@@ -396,26 +396,47 @@
       totals.incl += lt.incl;
       totals.btw += lt.btw;
       totals.excl += lt.excl;
-      (line.splits || []).forEach((split) => {
-        const { bedragIncl, btwBedrag, bedragExcl } = computeSplit(split);
-        if (Number(split.btw) === 0.21) {
-          totals.r21.incl += bedragIncl; totals.r21.btw += btwBedrag; totals.r21.excl += bedragExcl;
-        } else if (Number(split.btw) === 0.09) {
-          totals.r9.incl += bedragIncl; totals.r9.btw += btwBedrag; totals.r9.excl += bedragExcl;
+      // Dezelfde (voor afrondingsruis gecorrigeerde) rijen als in de PDF-tabel,
+      // zodat "w.v. 21%/9%" altijd optelt tot exact hetzelfde totaal hierboven.
+      getLineRenderRows(line).forEach((row) => {
+        if (row.btw === 0.21) {
+          totals.r21.incl += row.bedragIncl; totals.r21.btw += row.btwBedrag; totals.r21.excl += row.bedragExcl;
+        } else if (row.btw === 0.09) {
+          totals.r9.incl += row.bedragIncl; totals.r9.btw += row.btwBedrag; totals.r9.excl += row.bedragExcl;
         }
       });
     });
     return totals;
   }
+  // Een ingevuld BTW-bedrag is zelf al afgerond op de cent (zoals op de bon).
+  // Terugrekenen naar excl. (btw-bedrag / tarief) versterkt die afrondingsfout met
+  // een factor 1/tarief — bij 9% dus ruim 11x. Deze marge (per ingevuld tarief
+  // een halve cent BTW-afronding, teruggerekend naar het effect op het bedrag)
+  // voorkomt dat normale afrondingsruis onterecht als fout wordt gezien.
+  function getLineTolerance(line) {
+    return (line.splits || []).reduce((sum, split) => {
+      const btw = Number(split.btw) || 0;
+      return sum + (btw > 0 ? 0.005 / btw : 0);
+    }, 0.005);
+  }
   // Rijen voor de PDF-tabel: één rij per ingevulde BTW-tarief, plus — als het totaal
-  // hoger is dan de som van de ingevulde tarieven — een impliciete rij voor het
-  // resterende (0%/onbekende) deel, zodat het totaal van de regel altijd klopt.
+  // (buiten de afrondingsmarge) hoger is dan de som van de ingevulde tarieven —
+  // een impliciete rij voor het resterende (0%/onbekende) deel, zodat het totaal
+  // van de regel altijd klopt. Een negatieve rest buiten de marge wijst op een
+  // echte invoerfout (zie updateLineComputed) en wordt hier ook zichtbaar.
   function getLineRenderRows(line) {
     const totaalIncl = Number(line.totaalIncl) || 0;
     const rows = (line.splits || []).map((split) => ({ btw: Number(split.btw) || 0, ...computeSplit(split) }));
     const rest = totaalIncl - rows.reduce((sum, r) => sum + r.bedragIncl, 0);
-    if (Math.abs(rest) > 0.005) {
+    if (Math.abs(rest) > getLineTolerance(line)) {
       rows.push({ btw: 0, bedragIncl: rest, btwBedrag: 0, bedragExcl: rest });
+    } else if (rows.length && Math.abs(rest) > 0.0001) {
+      // Afrondingsruis binnen de marge: in de excl.-kolom van de laatste rij verwerken,
+      // zodat de regel exact optelt tot het ingevulde totaal. Het BTW-bedrag blijft
+      // ongewijzigd — dat is wat letterlijk van de bon is overgenomen.
+      const last = rows[rows.length - 1];
+      last.bedragIncl += rest;
+      last.bedragExcl += rest;
     }
     return rows;
   }
@@ -687,12 +708,15 @@
         const infoLines = [
           ["Naam:", `${header.voornaam} ${header.achternaam}`.trim() || "-"],
           ["IBAN:", header.iban || "-"],
-          ["Kostenplaats:", header.balie || "-"],
+          ["Kostenplaats/vestiging:", header.balie || "-"],
           ["Ingediend op:", nowStr],
         ];
+        // Waardekolom dynamisch positioneren op basis van de langste label —
+        // voorkomt overlap als een label later weer wordt aangepast/verlengd.
+        const infoValueX = MARGIN + Math.max(...infoLines.map(([label]) => fontBold.widthOfTextAtSize(label, 10))) + 14;
         infoLines.forEach(([label, value]) => {
           page.drawText(label, { x: MARGIN, y, size: 10, font: fontBold, color: rgb(0.3, 0.3, 0.3) });
-          page.drawText(value, { x: MARGIN + 85, y, size: 10, font, color: rgb(0, 0, 0) });
+          page.drawText(value, { x: infoValueX, y, size: 10, font, color: rgb(0, 0, 0) });
           y -= 15;
         });
         y -= 8;

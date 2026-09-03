@@ -1,4 +1,4 @@
-const CACHE_NAME = "declaraties-v7";
+const CACHE_NAME = "declaraties-v10";
 const SHELL_FILES = [
   "./",
   "./index.html",
